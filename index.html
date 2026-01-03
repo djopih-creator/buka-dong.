@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Surat Cinta Animasi Kertas</title>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Caveat', cursive;
+            background: linear-gradient(135deg, #ffeaa7, #fab1a0);
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .paper {
+            position: absolute;
+            width: 80%;
+            max-width: 500px;
+            height: 70vh;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            font-size: 18px;
+            line-height: 1.5;
+            color: #333;
+            display: none;
+            z-index: 1;
+            overflow: hidden;
+            transform: rotate(2deg);
+            transition: transform 0.5s ease;
+        }
+
+        .paper.active {
+            display: block;
+        }
+
+        .paper.tear {
+            animation: tear 1s ease-in-out forwards;
+        }
+
+        @keyframes tear {
+            0% {
+                clip-path: inset(0 0 0 0);
+            }
+            50% {
+                clip-path: inset(0 0 50% 0);
+                transform: rotate(5deg) translateY(20px);
+            }
+            100% {
+                clip-path: inset(0 0 100% 0);
+                transform: rotate(10deg) translateY(100px);
+                opacity: 0;
+            }
+        }
+
+        .paper:nth-child(odd) {
+            transform: rotate(-1deg);
+        }
+
+        .paper:nth-child(even) {
+            transform: rotate(1deg);
+        }
+
+        .tear-handle {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .tear-handle:hover {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .name-popup {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 10;
+        }
+
+        .name-popup.hidden {
+            display: none;
+        }
+
+        .name-form {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .name-form input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            width: 200px;
+        }
+
+        .name-form button {
+            padding: 10px 20px;
+            background: #fab1a0;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .response-form {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: none;
+            z-index: 5;
+        }
+
+        .response-form.active {
+            display: block;
+        }
+
+        .response-form textarea {
+            width: 100%;
+            height: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .response-form button {
+            padding: 10px 20px;
+            background: #fab1a0;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div class="name-popup" id="namePopup">
+        <div class="name-form">
+            <h2>Masukkan Nama Kamu</h2>
+            <input type="text" id="userName" placeholder="Nama kamu...">
+            <br>
+            <button onclick="startAnimation()">Mulai</button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="paper active" id="paper1">
+            <p>haii <span id="namePlaceholder">kya</span>, apakabar nih</p>
+            <div class="tear-handle" onclick="tearPaper(1)">Tarik untuk lanjut</div>
+        </div>
+        <div class="paper" id="paper2">
+            <p>semoga kamu sehat dan cantik terus ya</p>
+            <div class="tear-handle" onclick="tearPaper(2)">Tarik untuk lanjut</div>
+        </div>
+        <div class="paper" id="paper3">
+            <p>emm, aku cuman mau bilang, aku suka banget sama kamu.</p>
+            <div class="tear-handle" onclick="tearPaper(3)">Tarik untuk lanjut</div>
+        </div>
+        <div class="paper" id="paper4">
+            <p>kenapa sih kok aku suka kamu, karena: <br>
+            1. Kamu Itu Paket Lengkap (Cantik + Manis)<br>
+            Jujur ya, siapa sih yang nggak betah lihat wajah kamu? Kamu itu cantik, tapi cantiknya nggak ngebosenin. Ada sisi manisnya yang bikin aku selalu pengen curi-curi pandang. Senyum kamu itu lho, beneran bisa bikin hari aku yang berantakan jadi terasa jauh lebih baik.<br>
+            2. Hati Kamu "Emas" Banget<br>
+            Bukan cuma fisik, tapi kebaikan hati kamu itu yang bikin aku makin sayang. Kamu peduli sama orang lain, perhatian sama hal-hal kecil, dan nggak tegaan. Punya pasangan yang hatinya tulus kayak kamu itu rasanya tenang banget, kayak nemu tempat pulang yang nyaman.</p>
+            <div class="tear-handle" onclick="tearPaper(4)">Tarik untuk lanjut</div>
+        </div>
+        <div class="paper" id="paper5">
+            <p>3. Lucu dan Menggemaskan (Bikin Kangen!)<br>
+            Ini nih yang paling bahaya! Kamu itu lucu tanpa dibuat-buat. Kadang tingkah kamu yang random atau ekspresi kamu pas lagi bingung itu beneran menggemaskan. Aku sering senyum-senyum sendiri kalau ingat kelakuan kamu. Kamu itu mood booster alami buat aku.<br>
+            Intinya...<br>
+            Aku suka kamu bukan karena satu hal aja, tapi karena semua "warna" yang ada di diri kamu. Kamu bisa jadi sosok yang anggun, tapi di detik berikutnya bisa jadi orang paling kocak yang pernah aku kenal. I just love being around you.</p>
+            <div class="tear-handle" onclick="tearPaper(5)">Tarik untuk lanjut</div>
+        </div>
+        <div class="paper" id="paper6">
+            <p>emm, gimana kalau kita pacaran</p>
+            <div class="tear-handle" onclick="tearPaper(6)">Tarik untuk lanjut</div>
+        </div>
+        <div class="paper" id="paper7">
+            <p>jawab ya!, mohon di jawab dengan jujur. terimakasih</p>
+            <div class="tear-handle" onclick="tearPaper(7)">Selesai</div>
+        </div>
+        <div class="response-form" id="responseForm">
+            <h3>Jawab Surat Ini</h3>
+            <textarea placeholder="Tulis jawaban kamu di sini..."></textarea>
+            <button onclick="submitResponse()">Kirim Jawaban</button>
+        </div>
+    </div>
+
+    <script>
+        let currentPaper = 1;
+        const totalPapers = 7;
+
+        function startAnimation() {
+            const name = document.getElementById('userName').value || 'kya';
+            document.getElementById('namePlaceholder').textContent = name;
+            document.getElementById('namePopup').classList.add('hidden');
+        }
+
+        function tearPaper(paperNumber) {
+            const paper = document.getElementById(`paper${paperNumber}`);
+            paper.classList.add('tear');
+            setTimeout(() => {
+                paper.classList.remove('active', 'tear');
+                if (paperNumber < totalPapers) {
+                    currentPaper++;
+                    document.getElementById(`paper${currentPaper}`).classList.add('active');
+                } else {
+                    document.getElementById('responseForm').classList.add('active');
+                }
+            }, 1000);
+        }
+
+        function submitResponse() {
+            alert('Jawaban dikirim! Terima kasih.');
+            // Di sini bisa tambahkan logika untuk kirim email atau simpan data
+        }
+    </script>
+</body>
+</html>
